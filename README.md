@@ -8,7 +8,7 @@
 
 本手册只以 .NET 平台下的 C# 语言进行规范，不对其他语言进行规范。并且为了与现代技术信息同步，运行时框架一律使用 .NET Core 2.1 和.NET Standard 2.0以上版本，支持最低C#语法版本为 7.0，务必使用 Visual Studio 2017 15.6+ 版本，推荐使用 Visual Studio 2019 版本，点击 [http://www.visualstudio.com](http://www.visualstudio.com) 下载最新版本的Visual Studio，以及 [https://dotnet.microsoft.com/download/dotnet-core](https://dotnet.microsoft.com/download/dotnet-core)下载相关的 .NET Core SDK。
 
-
+希望各大 .NET 同学可以通过提出 [Issue](Issue) 或提交分支的 **Pull Request** 多多献策，帮助一起使文档更加完善，为了各位的梦想一起前行。
 
 # 编程规范
 
