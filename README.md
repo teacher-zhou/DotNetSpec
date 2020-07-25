@@ -1,4 +1,4 @@
-# .NET 编程开发规范 v1.1.1
+# .NET 编程开发规范 v1.2
 
 现代软件行业的高速发展对开发者的综合素质要求越来越高，因为不仅是编程知识点，其它维度的知识点也会影响到软件的最终交付质量。比如：数据库的表结构和索引设计缺陷可能带来软件上的架构缺陷或性能风险；工程结构混乱导致后续维护艰难；没有鉴权的漏洞代码易被黑客攻击等等。本手册以开发人员为中心，定义了编程规范、异常日志、单元测试、项目结构4个维度。根据约束力强弱及故障敏感性，规范依次分为【强制】、【推荐】、【参考】三大类。对于条目的延伸信息中，`说明`对内容做了适当扩展和解释；`正例`提倡什么样的编码和实现方式；`反例`说明需要提防的雷区，以及真实的错误案例。
 
@@ -6,11 +6,30 @@
 
 现代软件架构都需要协同开发完成，高效协作即降低协同成本，提升沟通效率，所谓无规矩不成方圆，无规范不能协作。众所周知，制订交通法规表面上是要限制行车权，实际上是保障公众的人身安全。试想如果没有限速，没有红绿灯，谁还敢上路行驶。对软件来说，适当的规范和标准绝不是 消灭代码内容的创造性、优雅性，而是限制过度个性化，以一种普遍认可的统一方式 一起做事，提升协作效率。代码的字里行间流淌的是软件生命中的血液，质量的提升是尽可能少踩坑，杜绝踩重复的坑，切实提升质量意识。
 
-本手册只以 .NET 平台下的 C# 语言进行规范，不对其他语言进行规范。并且为了与现代技术信息同步，运行时框架一律使用 .NET Core 2.1 和.NET Standard 2.0以上版本，支持最低C#语法版本为 7.0，务必使用 Visual Studio 2017 15.6+ 版本，推荐使用 Visual Studio 2019 版本，点击 [http://www.visualstudio.com](http://www.visualstudio.com) 下载最新版本的Visual Studio，以及 [https://dotnet.microsoft.com/download/dotnet-core](https://dotnet.microsoft.com/download/dotnet-core)下载相关的 .NET Core SDK。
+本手册只以 .NET 平台下的 C# 语言进行规范，不对其他语言进行规范。并且为了与现代技术信息同步，运行时框架一律使用 `.NET Core 2.1` 和 `.NET Standard 2.0` 以上版本，支持最低C#语法版本为 7.0，务必使用使用 Visual Studio 2019 版本，点击 [http://www.visualstudio.com](http://www.visualstudio.com) 下载最新版本的Visual Studio，以及 [https://dotnet.microsoft.com/download/dotnet-core](https://dotnet.microsoft.com/download/dotnet-core)下载相关的 .NET Core SDK。
 
 希望各大 .NET 同学可以通过提出 **Issues** 或提交分支的 **Pull Request** 多多献策，帮助一起使文档更加完善，为了各位的梦想一起前行。
 
-# 编程规范
+# 目录索引
+* [编程规范](#编程规范)
+    * [命名规范](#命名规范)
+    * [代码语句](#代码格式)
+    * [OOP规范](#OOP规范)
+    * [控制语句](#控制语句)
+    * [并发处理](#并发处理)
+    * [集合](#集合)
+    * [注释规范](#注释规范)
+    * [其他](#其他)
+* [异常日志](#异常日志)
+    * [异常处理](#异常处理)
+    * [日志规范](#日志规范)
+* [单元测试](#单元测试)
+* [项目结构](#项目结构)
+    * [分层模型规范](#分层模型规范)
+    * [第三方库](#第三方库)
+* [变更记录](#变更记录)
+* [参考文献](#参考文献)
+    
 
 ## 命名规范
 
@@ -30,7 +49,7 @@
 
     正例：\_member / \_context / \_userId / \_fileManagerFactory
 
-    反例：\_$dollar / \_@name / name\_ / name@\_
+    反例：_$dollar / \_@name / name\_ / name@\_
 
 3. 【强制】方法里的成员变量和方法的签名，不允许使用下划线、特殊字符、数字开头，也不能以下换线、特殊字符结尾。
 
@@ -42,7 +61,7 @@
 
 4. 【推荐】变量声明使用关键字 **`var`** 来替代强制声明的数据类型，并务必对变量进行初始化。这样声明类型可以根据初始化的值，由编译器自动推断数据类型。这一点在代码重构时就能更高效地提现出来。
 
-    正例：`var users = GetUserList(3.;`
+    正例：`var users = GetUserList(3);`
 
 5. 【强制】参数名称，不允许使用下划线、特殊字符、数字开头，也不能以下换线、特殊字符结尾。
 
@@ -60,24 +79,42 @@
 
     >说明：常量必须使用关键字 **`const`** 来修饰，力求语义表达完整清楚，不要嫌名字长。
 
-7. 【强制】接口第一个字母必须是英文字母`I`开头
+7. 【强制】接口第一个字母必须是英文字母`I`开头，后的每一个单词首字母大写
 
     正例：IEnumerable, IMyService
 
-8. 【强制】抽象类使用`Base`单词结尾，异常类命名使用 Exception 结尾；测试类命名以它要测试的类的名称开始，以 Test 结尾。
+8. 【推荐】抽象类使用 `Base / Provider` 结尾
+
+9. 【强制】异常类命名使用 `Exception` 结尾；
 
 10. 【推荐】布尔值的变量、属性或方法，首个单词以`Is、Has、Can`开头。
 
     正例：isSystem / HasNamed / CanClick
 
 11. 【强制】命名空间的每个级别使用`.`分隔，之间有且仅有一个自然语义的英语单词。
+12. 【强制】测试类命名以它要测试的类的名称开始，以 `Test` 结尾，测试方法要以 `Test` 结尾，并且方法命名要求写明测试的大致内容，可以要求每个单词或短语使用下划线分割。
+    正例：
+    ```
+    public class UserTest
+    {
+        public void Test_UserName_Duplicate()
+        {
+            //...
+        }
+        
+        public void Test_CreateUser_ThrowArgumentNullException()
+        {
+            //..
+        }
+    }
+    ```
 13. 【强制】杜绝完全不规范的缩写，避免望文不知义。
 
-    反例：AbstractClass`缩写`命名成 AbsClass；condition`缩写`命名成 condi，此类随意缩写严重降低了代码的可阅读性。
+    反例：`AbstractClass` 缩写命名成 `AbsClass`；`condition` 缩写命名成 `condi`，此类随意缩写严重降低了代码的可阅读性。
 
 14. 【推荐】为了达到代码自解释的目标，任何自定义编程元素在命名时，使用尽量完整的单词组合来表达其意。
 
-    正例：从远程仓库拉取代码的类命名为 PullCodeFromRemoteRepository。
+    正例：从远程仓库拉取代码的类命名为 `PullCodeFromRemoteRepository`。
 
     反例：变量 `int a;` 的随意命名方式。
 
@@ -162,7 +199,7 @@
         static void Main(string[] args)
         {
             // 缩进 4 个空格
-            String say = `hello`;
+            String say = "hello";
             
             // 运算符的左右必须有一个空格
             int flag = 0;
@@ -177,12 +214,12 @@
             // 左大括号前加空格且换行
             if (flag == 1)
             {
-                Console.WriteLine(`world`);
+                Console.WriteLine("world");
                 // 右大括号前换行
             }
             else
             {
-                Console.WriteLine(`ok`);
+                Console.WriteLine("ok");
                 // 在右大括号后直接结束，则必须换行
             }
         }
@@ -199,11 +236,9 @@
 
     正例：
     ```
-    public Task<User> GetById(int id)
-        => \_context.GetAsync(id);
+    public Task<User> GetById(int id) => _context.GetAsync(id);
     
-    public int CountSaveChanges()
-        => \_context.Count();
+    public int CountSaveChanges() => _context.Count();
     ```
 
 9. 【强制】单行字符数限制不超过120个，超过需要换行，换行时务必遵守以下原则：
@@ -245,7 +280,7 @@
     ```
 
 10. 【强制】方法参数在定义和传入时，多个参数逗号后边必须加空格。
-11. 正例：下例中实参的`a`,后边必须要有一个空格。
+11. 正例：下例中实参的 `a` ,后边必须要有一个空格。
     ```
     method("a", "b", "c");
     ```
@@ -271,6 +306,19 @@
 >说明：公有方法是类的调用者和维护者最关心的方法，首屏展示最好；保护方法虽然只是子类关心，也可能是`模板设计模式`下的核心方法；而私有方法外部一般不需要特别关心，是一个 黑盒实现；因为承载的信息价值较低，而属性则放在类体最后。
 
 15. 【推荐】当一个类有多个构造方法，或者多个同名方法，这些方法应该按顺序放置在一起，便于阅读。
+16. 【推荐】使用可选参数代替更多的重载方法
+
+    正例：`public void Add(int a, int b = 10, int c = 50)`
+17. 【强制】异步方法要求最后一个是 `CancellationToken` 类型的可选参数
+
+    正例：
+    ```
+    // 7.3 版本以下
+    public Task CreateAsync(User user, CancellationToken = default(CancellationToken)) 
+    
+    // 7.3 版本以上
+    public Task CreateAsync(User user, CancellationToken = default) 
+    ```
 
 ## OOP 规范
 
@@ -288,6 +336,17 @@
 2. 【强制】已经被广泛使用的接口（interface）如果要增加方法或修改参数，要使用扩展方法来对原有方法进行扩展。
 
  >说明：接口中已定义好的方法或参数被直接更改，会导致程序里的所有调用处都报异常，使用扩展方法可以有效避免此事情的发生。唯一缺点就是不能被重新实现。
+ 
+ 正例：
+ ```
+ public static class MyExtensions
+ {
+     public static void Method(this IInterface service)
+     {
+         //...
+     }
+ }
+ ```
 
 3. 【强制】不要使用已过期的类或方法。
 
@@ -450,7 +509,7 @@
 
     >说明：`List<T>` 是列表，有添加和移除功能，可能会被调用方私自改写集合的内容，而造成不可预期的错误，而 `IEnumerable<T>` 只是一个迭代集合，仅可获取，不可修改。
 
-3. 【推荐】在属性中，给 IEnumerable<T> 进行初始化赋值时，应该使用 `HashSet<T>` 而不是 `List<T>`。
+3. 【推荐】在属性中，给 `IEnumerable<T>` 进行初始化赋值时，应该使用 `HashSet<T>` 而不是 `List<T>`。
 
     正例：
     ```
@@ -458,6 +517,8 @@
     ```
 
     >说明：`HashSet<T>` 的效率要明显高于 `List<T>`
+4. 【推荐】在属性或返回值时，使用 `IReadOnlyList<T>` 作为泛型 `List<T>` 结果的返回类型。
+    >说明：比起 `IEnumerable<T>` 接口，`IReadOnlyList<T>` 可以使用索引器访问特定索引项，因此可以使用 `for` 语句进行循环。
 
 4. 【强制】集合判断是否有数据，使用 `System.Linq` 的 `Any` 方法。
 
@@ -609,7 +670,7 @@
     - 集合里取出的数据元素也可能为 null。
     - 远程调用返回对象时，一律要求进行空指针判断，防止 NRE。
     - 对于 Session 中获取的数据，建议 NPE 检查，避免空指针。
-    - 级联调用 obj.GetA(..GetB(..GetC(.；一连串调用，易产生 NRE。
+    - 级联调用 obj.GetA().GetB().GetC()；一连串调用，易产生 NRE。
 
     正例：使用可为空表达式 **（?.）** 来防止NRE的问题。
 
@@ -725,22 +786,28 @@
     
     正例：
     
-    * `AshtamDisplayListViewModel`(火山灰列表展示视图模型.
-    * `UserCreateViewModel`(用户创建视图模型.
-    * `CompanyRouteEditViewModel`(公司航路编辑视图模型.
-    * `FlightCalculationDetailViewModel`(飞行计划计算详情视图模型.
+    * `MembershipDisplayListViewModel`(会员列表展示视图模型)
+    * `UserCreateViewModel`(用户创建视图模型)
+    * `CompanyEditViewModel`(公司编辑视图模型)
+    * `CalculationDetailViewModel`(路线详情视图模型)
     
 - `Specification Object`(SO.：规约对象，各层接收上层的查询请求。注意超过3个参数的查询就要考虑封装成规约对象。
     
-    【强制】以 Spec 作为后缀，如 UserListSpec / FlightPlanSpec
+    【强制】以 Spec 作为后缀，如 UserListSpec / AuthoritySpec
 
 3. 【强制】项目命名空间每一层的名字作为第三级，最多不能超过5级。
 
-    - UI层：UerInterfaces
-    - API层：Exposes
-    - 请求处理层：Web
-    - 应用逻辑层：Managers
-    - 领域服务层：Services
+    - 表现层：Presentation，表现层可分为：
+        * Local 本地端：Winform/WPF/UWP/Windows 服务等安装在操作系统的软件。
+        * Web 网页程序：Mvc/WebApi/Razor Page/Blazor等通过 web 方式访问的程序。
+        * App 移动设备：手机/Pad等手持终端设备。
+    - Exposes 层：指的是暴露给消费者(Consumer)调用的 API，可以是 SDK/服务/WebApi 等方式构建的以服务为中心的项目。
+    - 应用层：Applications
+    - 领域层：Domain
+        - 领域服务：DomainService
+        - 领域模型：DomainModel
+        - 领域实体：DomainEntity
+        - 领域事件：DomainEvent
     
     >说明：如果需要单独为各层的传输对象建立项目和命名空间，则需要按照每层命名规范，并按以下规范命名：
 
@@ -748,11 +815,6 @@
     - SO：Specifications
     - DTO：DataTransferObjects
     - DO：DataObjects
-
-    【参考】由于 CIF 库已经封装某一层的功能，因此可以根据项目成本、时间、大小等因素考虑对于项目分层的划分。
-    
-    - Service 如果仅仅是数据存储的操作，可省略，由 CIF.Storage 来完成；
-    - 如果无复杂的 Manager ，则可以省略，并将简单的业务逻辑写在 Web 层；
     
     >说明：没有一层不变的架构，需要根据业务的扩展性、时间的推移适当地对项目分层进行重构，以适应当前需求。
 
@@ -776,11 +838,19 @@
 
 
 # 变更记录
-### 1.1.1
+## 1.2
+* 【新增】目录索引
+* 【新增】推荐使用 `IReadOnlyList<T>` 作为泛型集合的返回类型
+* 【更新】项目命名空间的参考规范
+* 【更新】接口命名、单元测试命名规范
+* 【修复】一些不通顺的语句
+* 【修复】反括号为.改为)
+
+## 1.1.1
 * 修改了日志组件和枚举部分的规范
-### 1.1.0
+## 1.1.0
 * 细化 ViewModel 的命名规范
-### 1.0.0
+## 1.0.0
 * 初步拟定内容
 
 # 参考文献
