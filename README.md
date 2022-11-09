@@ -88,7 +88,7 @@
 16. 【强制】枚举声明使用英文名词复数形式，枚举项采用【Pascal】命名规范，并且设置每一个项的值。
 
     正例：
-    ```
+    ``` cs
     public enum MemberType
     
     public enum SqlOption
@@ -99,7 +99,7 @@
     ```
     反例：
 
-    ```
+    ``` cs
     public enum SqlTypeEnum
     ```
 
