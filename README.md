@@ -125,7 +125,7 @@
 16. 【强制】枚举声明使用英文名词复数形式，枚举项采用【Pascal】命名规范，并且设置每一个项的值。
 
     正例：
-    ```
+    ``` cs
     public enum MemberType
     
     public enum SqlOption
@@ -136,14 +136,14 @@
     ```
     反例：
 
-    ```
+    ``` cs
     public enum SqlTypeEnum
     ```
 
 17. 【推荐】枚举项的要有一个未知的项，并且值用 0 来表示。可以使用 None或 Unknow 来作为第一项的枚举选项。
 
     正例：
-    ```
+    ``` cs
     public enum MemberType
     {
       Unknow = 0,
@@ -195,7 +195,7 @@
     >说明：如果使用 tab 缩进，必须设置 1 个 tab 为 4 个空格。
 
     正例（以上1-5）：
-    ```
+    ``` cs
         static void Main(string[] args)
         {
             // 缩进 4 个空格
@@ -223,19 +223,19 @@
                 // 在右大括号后直接结束，则必须换行
             }
         }
-        ```
+    ```
 
 7. 【强制】注释的双斜线与注释内容之间有且仅有一个空格。
 
     正例：
-    ```
+    ``` cs
     // 注释内容
     ```
 
 8. 【推荐】如果只有一句代码，尽量使用方法主体语句。
 
     正例：
-    ```
+    ``` cs
     public Task<User> GetById(int id) => _context.GetAsync(id);
     
     public int CountSaveChanges() => _context.Count();
@@ -251,7 +251,7 @@
     * 在括号前不要换行，见反例。
 
     正例：
-    ```
+    ``` cs
     var sb = new StringBuilder();
     sb.Append("xxx")
         .Append("xxxx")
@@ -272,7 +272,7 @@
     ```
 
     反例：
-    ```
+    ``` cs
     var sb = new StringBuilder();
     // 超过 120 个字符的情况下，不要在括号前换行
     sb.Append("zi").Append("xin")...Append
@@ -280,15 +280,16 @@
     ```
 
 10. 【强制】方法参数在定义和传入时，多个参数逗号后边必须加空格。
-11. 正例：下例中实参的 `a` ,后边必须要有一个空格。
-    ```
+
+11. 正例：下例中实参的`a`,后边必须要有一个空格。
+    ``` cs
     method("a", "b", "c");
     ```
 
 12. 【推荐】没有必要增加若干空格来使某一行的字符与上一行对应位置的字符对齐。
 
     正例：
-    ```
+    ``` cs
     int a = 3;
     long b = 4L;
     float c = 5F;
@@ -325,7 +326,7 @@
 1. 【推荐】引用类型的属性要在声明后给一个默认实例化。
 
     正例：
-    ```
+    ``` cs
     public MyEntity Table { get; set; } = new MyEntity();
     
     public IEnumerable<UserInfo> Users { get; set; } = new HashSet<UserInfo>();
@@ -361,7 +362,7 @@
 5. 【强制】任何情况下，禁止使用字符串拼接。特别是在循环内部组装字符串时，要使用 `StringBuilder` 类。
 
     正例：
-    ```
+    ``` cs
     var sb = new StringBuilder();
     foreach (var span in collection)
     {
@@ -370,7 +371,7 @@
     ```
 
     反例：
-    ```
+    ``` cs
     string str = string.Empty;
     foreach (var span in collection)
     {
@@ -404,7 +405,7 @@
     > 说明：因为 Tuple 仅返回 Item1, Item2, ItemX，调用者根本不能直观的知道 Item1 Item2 到底是什么意思。使用 TupleValue 可以直接返回字段，而不是 Item1 Item2 ItemX，但该版类型需要 C# 7.0 的语法支持。
 
     正例：
-    ```
+    ``` cs
     public (int age, string name. GetTuple()
         => (age: 1, name: `xyz`);
     
@@ -419,7 +420,7 @@
 1. 【强制】在控制语句中，即使只有一条语句，也不能省略大括号。
 
     正例：
-    ```
+    ``` cs
     if(a == 1)
     {
         throw new ArgumentOutOfRangeException();
@@ -427,7 +428,7 @@
     ```
 
     反例：
-    ```
+    ``` cs
     if(a == 1)
         throw new ArgumentOutOfRangeException();
     ```
@@ -435,7 +436,7 @@
 2. 【强制】在一个 `switch` 块内，每个 `case` 要么通过 `break/return` 等来终止，要么注释说明程序将继续执行到哪一个 `case` 为止；在一个 `switch` 块内，都必须包含一个 `default` 语句并且放在最后，即使它什么代码也没有。
 
 3. 【推荐】表达异常的分支时，少用 if-else 方式，这种方式可以改写成：
-    ```
+    ``` cs
     if (condition)
     {
         // ...
@@ -451,7 +452,7 @@
     正例：超过 3 层的 `if-else` 的逻辑判断代码可以使用卫语句、策略模式、状态模式等来实现，
 
     其中卫语句示例如下：
-    ```
+    ``` cs
     public void Today()
     {
         if (IsBusy())
@@ -476,7 +477,7 @@
     >说明：很多 if 语句内的逻辑相当复杂，阅读者需要分析条件表达式的最终结果，才能明确什么样的条件执行什么样的语句，那么，如果阅读者分析逻辑表达式错误呢？
 
     正例：
-    ```
+    ``` cs
     var canCreate = (Directory.Exists("xxxx") && File.Exists("xxx") || (……)  ||  (……);
     
     if(canCreate)
@@ -486,7 +487,7 @@
     ```
 
     反例：
-    ```
+    ``` cs
      if ((Directory.Exists("xxxx") && File.Exists("xxx")  ||  (……)  ||  (…….)
      {
       ……
@@ -512,7 +513,7 @@
 3. 【推荐】在属性中，给 `IEnumerable<T>` 进行初始化赋值时，应该使用 `HashSet<T>` 而不是 `List<T>`。
 
     正例：
-    ```
+    ``` cs
     public IEnumerable<T> Users { get; set; } = new HashSet<T>();
     ```
 
@@ -523,7 +524,7 @@
 4. 【强制】集合判断是否有数据，使用 `System.Linq` 的 `Any` 方法。
 
     正例：
-    ```
+    ``` cs
     if(list.Any())
     {
         // …
@@ -546,7 +547,7 @@
 4. 【强制】如果方法有返回值，必须使用 `<returns>返回值的说明</returns>` 并写清楚返回的值的注释。
 
     正例：
-    ```
+    ``` cs
     /// <summary>
     /// 创建指定名称的文件夹。
     /// </summary>
@@ -587,7 +588,7 @@
 10. 【参考】好的命名、代码结构是自解释的，注释力求精简准确、表达到位。避免出现注释的一个极端：过多过滥的注释，代码的逻辑一旦修改，修改注释是相当大的负担。
 
     反例：
-    ```
+    ``` cs
     // put elephant into fridge
     Put(elephant, fridge);
     ```
@@ -622,14 +623,14 @@
     > 说明：无法使用常规检查除外。
 
     正例：
-    ```
+    ``` cs
     if(obj == null)
     {
         // ……
     }
     ```
     反例：
-    ```
+    ``` cs
     try
     {
         obj.Invoke();
